@@ -96,18 +96,33 @@ class Git
      */
     public function getRevisions()
     {
+        $revisions = array();
+
         $cwd = getcwd();
         chdir($this->repositoryPath);
-        exec('git log --no-merges --oneline', $output, $return);
+        exec('git log --no-merges', $output, $return);
         chdir($cwd);
 
-        $max = count($output);
+        $numLines = count($output);
 
-        for ($i = 0; $i < $max; $i++) {
-            $tmp        = explode(' ', $output[$i]);
-            $output[$i] = array_shift($tmp);
+        for ($i = 0; $i < $numLines; $i++) {
+            $tmp = explode(' ', $output[$i]);
+
+            if (count($tmp) == 2 && $tmp[0] == 'commit') {
+                $sha1 = $tmp[1];
+            }
+
+            else if (count($tmp) == 9 && $tmp[0] == 'Date:') {
+                $revisions[] = array(
+                  'date' => \DateTime::createFromFormat(
+                    'D M j H:i:s Y O',
+                    join(' ', array_slice($tmp, 3))
+                  ),
+                  'sha1' => $sha1
+                );
+            }
         }
 
-        return array_reverse($output);
+        return array_reverse($revisions);
     }
 }
