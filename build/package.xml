@@ -17,7 +17,7 @@
   <email>sebastian@phpunit.de</email>
   <active>yes</active>
  </lead>
- <date>2013-MM-DD</date>
+ <date>2013-05-29</date>
  <version>
   <release>1.0.0</release>
   <api>1.0.0</api>
@@ -36,6 +36,7 @@
      <file baseinstalldir="/" name="Git.php" role="php"/>
     </dir>
    </dir>
+   <file baseinstalldir="/" name="ChangeLog.md" role="doc"/>
    <file baseinstalldir="/" name="LICENSE" role="doc"/>
    <file baseinstalldir="/" name="README.md" role="doc"/>
   </dir>
