@@ -110,13 +110,11 @@ class Git
 
             if (count($tmp) == 2 && $tmp[0] == 'commit') {
                 $sha1 = $tmp[1];
-            }
-
-            else if (count($tmp) == 9 && $tmp[0] == 'Date:') {
+            } elseif (count($tmp) == 9 && $tmp[0] == 'Date:') {
                 $revisions[] = array(
                   'date' => \DateTime::createFromFormat(
-                    'D M j H:i:s Y O',
-                    join(' ', array_slice($tmp, 3))
+                      'D M j H:i:s Y O',
+                      join(' ', array_slice($tmp, 3))
                   ),
                   'sha1' => $sha1
                 );
