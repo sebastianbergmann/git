@@ -140,4 +140,79 @@ class Git
         exec($command, $output, $returnValue);
         chdir($cwd);
     }
+
+    /**
+     * @return array
+     */
+    public function getRemoteRepositories()
+    {
+        $this->execute('git remote -v', $output, $return);
+        $repositories = array();
+
+        foreach ($output as $line) {
+            preg_match('~^([^\s]+)\s+(.+) \((fetch|push)\)$~', $line, $match);
+            $repository = $match[1];
+            isset($repositories[$repository]) or $repositories[$repository] = array();
+            $repositories[$repository][$match[3]] = $match[2];
+        }
+
+        return $repositories;
+    }
+
+    /**
+     * @return bool
+     * @throws Git_Exception_RemoteAlreadyExists
+     * @throws Git_Exception_NotValidRemoteName
+     * @throws Git_Exception
+     */
+    public function addRemoteRepository($name, $url)
+    {
+        $this->execute('git remote add ' . escapeshellarg($name) . ' ' . escapeshellarg($url) . ' 2>&1', $output, $return);
+
+        foreach ($output as $line) {
+            if (preg_match('~^fatal: remote .+ already exists.$~', $line)) {
+                throw new Git_Exception_RemoteAlreadyExists;
+            } elseif (preg_match('~fatal: \'.+\' is not a valid remote name$~', $line)) {
+                throw new Git_Exception_NotValidRemoteName;
+            } elseif (substr($line, 0, 6) == 'fatal:') {
+                throw new Git_Exception(substr($line, 7));
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     * @throws Git_Exception_CouldNotFetch
+     */
+    public function updateRemoteRepositories()
+    {
+        $this->execute('git remote update 2>&1', $output, $return);
+
+        foreach ($output as $line) {
+            if (substr($line, 0, 22) == 'error: Could not fetch') {
+                throw new Git_Exception_CouldNotFetch;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     * @throws Git_Exception_CouldNotRemove
+     */
+    public function removeRemoteRepository($name)
+    {
+        $this->execute('git remote rm ' . escapeshellarg($name) . ' 2>&1', $output, $return);
+
+        foreach ($output as $line) {
+            if (substr($line, 0, 38) == 'error: Could not remove config section') {
+                throw new Git_Exception_CouldNotRemove;
+            }
+        }
+
+        return true;
+    }
 }

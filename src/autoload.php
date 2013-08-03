@@ -7,7 +7,12 @@ spl_autoload_register(
         static $classes = null;
         if ($classes === null) {
             $classes = array(
-                'sebastianbergmann\\git' => '/Git.php'
+                'sebastianbergmann\\git' => '/Git.php',
+                'sebastianbergmann\\git_exception' => '/Git/Exception.php',
+                'sebastianbergmann\\git_exception_remotealreadyexists' => '/Git/Exception/RemoteAlreadyExists.php',
+                'sebastianbergmann\\git_exception_notvalidremotename' => '/Git/Exception/NotValidRemoteName.php',
+                'sebastianbergmann\\git_exception_couldnotfetch' => '/Git/Exception/CouldNotFetch.php',
+                'sebastianbergmann\\git_exception_couldnotremove' => '/Git/Exception/CouldNotRemove.php',
             );
         }
         $cn = strtolower($class);
