@@ -36,7 +36,6 @@
      <file baseinstalldir="/" name="Git.php" role="php"/>
     </dir>
    </dir>
-   <file baseinstalldir="/" name="ChangeLog.md" role="doc"/>
    <file baseinstalldir="/" name="LICENSE" role="doc"/>
    <file baseinstalldir="/" name="README.md" role="doc"/>
   </dir>
