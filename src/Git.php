@@ -96,9 +96,7 @@ class Git
           'git diff --no-ext-diff ' . $from . ' ' . $to, $output, $return
         );
 
-        $tmp = explode(' ', $output[0]);
-
-        return $tmp[1];
+        return join("\n", $output);
     }
 
     /**
