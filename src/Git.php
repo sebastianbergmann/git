@@ -86,6 +86,22 @@ class Git
     }
 
     /**
+     * @param  string $from
+     * @param  string $to
+     * @return string
+     */
+    public function getDiff($from, $to)
+    {
+        $this->execute(
+          'git diff --no-ext-diff ' . $from . ' ' . $to, $output, $return
+        );
+
+        $tmp = explode(' ', $output[0]);
+
+        return $tmp[1];
+    }
+
+    /**
      * @return array
      */
     public function getRevisions()
