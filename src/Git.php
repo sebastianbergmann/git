@@ -70,10 +70,7 @@ class Git
      */
     public function checkout($revision)
     {
-        $cwd = getcwd();
-        chdir($this->repositoryPath);
-        exec('git checkout ' . $revision . ' 2>&1', $output, $return);
-        chdir($cwd);
+        $this->execute('git checkout ' . $revision . ' 2>&1', $output, $return);
     }
 
     /**
@@ -81,10 +78,7 @@ class Git
      */
     public function getCurrentBranch()
     {
-        $cwd = getcwd();
-        chdir($this->repositoryPath);
-        exec('git status --short --branch', $output, $return);
-        chdir($cwd);
+        $this->execute('git status --short --branch', $output, $return);
 
         $tmp = explode(' ', $output[0]);
 
@@ -96,14 +90,10 @@ class Git
      */
     public function getRevisions()
     {
+        $this->execute('git log --no-merges', $output, $return);
+
+        $numLines  = count($output);
         $revisions = array();
-
-        $cwd = getcwd();
-        chdir($this->repositoryPath);
-        exec('git log --no-merges', $output, $return);
-        chdir($cwd);
-
-        $numLines = count($output);
 
         for ($i = 0; $i < $numLines; $i++) {
             $tmp = explode(' ', $output[$i]);
@@ -122,5 +112,18 @@ class Git
         }
 
         return array_reverse($revisions);
+    }
+
+    /**
+     * @param string  $command
+     * @param array   $output
+     * @param integer $returnValue
+     */
+    private function execute($command, &$output, &$returnValue)
+    {
+        $cwd = getcwd();
+        chdir($this->repositoryPath);
+        exec($command, $output, $returnValue);
+        chdir($cwd);
     }
 }
