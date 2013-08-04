@@ -123,7 +123,6 @@ class Git
             } elseif (count($tmp) == 4 && $tmp[0] == 'Author:') {
                 $author = join(' ', array_slice($tmp, 1));
             } elseif (count($tmp) == 9 && $tmp[0] == 'Date:') {
-
                 $revisions[] = array(
                   'author'  => $author,
                   'date'    => \DateTime::createFromFormat(
