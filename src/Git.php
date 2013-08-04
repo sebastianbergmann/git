@@ -104,7 +104,11 @@ class Git
      */
     public function getRevisions()
     {
-        $this->execute('git log --no-merges', $output, $return);
+        $this->execute(
+            'git log --no-merges --date-order --reverse',
+            $output,
+            $return
+        );
 
         $numLines  = count($output);
         $revisions = array();
@@ -131,7 +135,7 @@ class Git
             }
         }
 
-        return array_reverse($revisions);
+        return $revisions;
     }
 
     /**
