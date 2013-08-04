@@ -121,14 +121,13 @@ class Git
             } elseif (count($tmp) == 4 && $tmp[0] == 'Author:') {
                 $author = join(' ', array_slice($tmp, 1));
             } elseif (count($tmp) == 9 && $tmp[0] == 'Date:') {
-                $date = \DateTime::createFromFormat(
-                    'D M j H:i:s Y O',
-                    join(' ', array_slice($tmp, 3))
-                );
 
                 $revisions[] = array(
                   'author'  => $author,
-                  'date'    => $date,
+                  'date'    => \DateTime::createFromFormat(
+                                   'D M j H:i:s Y O',
+                                    join(' ', array_slice($tmp, 3))
+                               ),
                   'sha1'    => $sha1,
                   'message' => isset($output[$i+2]) ? trim($output[$i+2]) : ''
                 );
