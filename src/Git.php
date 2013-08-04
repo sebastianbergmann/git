@@ -93,7 +93,9 @@ class Git
     public function getDiff($from, $to)
     {
         $this->execute(
-          'git diff --no-ext-diff ' . $from . ' ' . $to, $output, $return
+            'git diff --no-ext-diff ' . $from . ' ' . $to,
+            $output,
+            $return
         );
 
         return join("\n", $output);
@@ -125,9 +127,9 @@ class Git
                 $revisions[] = array(
                   'author'  => $author,
                   'date'    => \DateTime::createFromFormat(
-                                   'D M j H:i:s Y O',
-                                    join(' ', array_slice($tmp, 3))
-                               ),
+                      'D M j H:i:s Y O',
+                      join(' ', array_slice($tmp, 3))
+                  ),
                   'sha1'    => $sha1,
                   'message' => isset($output[$i+2]) ? trim($output[$i+2]) : ''
                 );
