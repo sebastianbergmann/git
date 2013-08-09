@@ -70,7 +70,11 @@ class Git
      */
     public function checkout($revision)
     {
-        $this->execute('git checkout ' . $revision . ' 2>&1', $output, $return);
+        $this->execute(
+            'git checkout --force --quiet' . $revision . ' 2>&1',
+            $output,
+            $return
+        );
     }
 
     /**
