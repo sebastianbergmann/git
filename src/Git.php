@@ -111,7 +111,7 @@ class Git
     public function getRevisions()
     {
         $this->execute(
-            'git log --no-merges --date-order --reverse',
+            'git log --no-merges --date-order --reverse --format=medium',
             $output,
             $return
         );
