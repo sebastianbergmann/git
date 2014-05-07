@@ -71,7 +71,7 @@ class Git
     public function checkout($revision)
     {
         $this->execute(
-            'git checkout --force --quiet' . $revision . ' 2>&1',
+            'git checkout --force --quiet ' . $revision . ' 2>&1',
             $output,
             $return
         );
