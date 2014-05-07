@@ -147,7 +147,7 @@ class Git
      * @param array   $output
      * @param integer $returnValue
      */
-    private function execute($command, &$output, &$returnValue)
+    protected function execute($command, &$output, &$returnValue)
     {
         $cwd = getcwd();
         chdir($this->repositoryPath);
