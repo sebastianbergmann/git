@@ -203,6 +203,20 @@ class Git
     }
 
     /**
+     * @param  string $branch
+     * @return bool
+     */
+    public function isExistingBranch($branch)
+    {
+        $this->execute(
+            'git branch --list ' . $branch,
+            $output,
+            $return
+        );
+        return count($output) > 0;
+    }
+
+    /**
      * @param string  $command
      * @param array   $output
      * @param integer $returnValue
