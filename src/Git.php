@@ -83,11 +83,47 @@ class Git
     public function getCurrentBranch()
     {
         $this->execute('git status --short --branch', $output, $return);
-
         $tmp = explode(' ', $output[0]);
-
         return $tmp[1];
     }
+
+  /**
+   * @return string
+   */
+  public function getCurrentRevision()
+  {
+      $this->execute('git log --pretty=format:\'%h\' --abbrev-commit  -1', $output, $return);
+      $tmp = trim($output[0]);
+      return $tmp;
+  }
+
+
+  /**
+   * @return string
+   */
+  public function getCurrentTag()
+  {
+      $this->execute('git describe --exact-match --tags $(git log -n1 --pretty=\'%h\') 2> /dev/null', $output, $return);
+      $tmp = trim($output[0]);
+      return $tmp;
+  }
+
+
+    /**
+    * @return string
+    */
+    public function getCurrentDescription()
+    {
+        $desc = $this->getCurrentBranch();
+        if($desc == 'HEAD') {
+            $desc = $this->getCurrentTag();
+            if($desc == '') {
+                $desc = $this->getCurrentRevision();
+            }
+        }
+        return $desc;
+    }
+
 
     /**
      * @param  string $from
@@ -140,6 +176,45 @@ class Git
         }
 
         return $revisions;
+    }
+
+    /**
+     * @param  string $from
+     * @param  string $to
+     * @return string
+     */
+    public function getAhead($from, $to)
+    {
+        $this->execute(
+            'git rev-list --left-right ' . $from . '..' . $to,
+            $output,
+            $return
+        );
+        $left = 0;
+        $right = 0;
+        foreach($output as $line) {
+          if(strstr($line,'<')===0) {
+            $left++;
+          } else {
+            $right++;
+          }
+        }
+        return array('left' => $left, 'right' => $right);
+    }
+
+    /**
+     * @param  string $branch
+     * @param  bool   $includeRemotes
+     * @return bool
+     */
+    public function isExistingBranch($branch, $includeRemotes = true)
+    {
+        $this->execute(
+            'git branch --list ' . ($includeRemotes?'-a ':'') . $branch,
+            $output,
+            $return
+        );
+        return count($output) > 0;
     }
 
     /**
