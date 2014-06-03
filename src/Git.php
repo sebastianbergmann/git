@@ -204,12 +204,13 @@ class Git
 
     /**
      * @param  string $branch
+     * @param  bool   $includeRemotes
      * @return bool
      */
-    public function isExistingBranch($branch)
+    public function isExistingBranch($branch, $includeRemotes = true)
     {
         $this->execute(
-            'git branch --list ' . $branch,
+            'git branch --list ' . ($includeRemotes?'-a ':'') . $branch,
             $output,
             $return
         );
