@@ -34,17 +34,17 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
- * @package    Git
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
  * @copyright  2013-2014 Sebastian Bergmann <sebastian@phpunit.de>
  * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
  * @link       http://www.github.com/sebastianbergmann/git
  */
 
-namespace SebastianBergmann;
+namespace SebastianBergmann\Git;
+
+use DateTime;
 
 /**
- * @package    Git
  * @author     Sebastian Bergmann <sebastian@phpunit.de>
  * @copyright  2013-2014 Sebastian Bergmann <sebastian@phpunit.de>
  * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
@@ -71,9 +71,7 @@ class Git
     public function checkout($revision)
     {
         $this->execute(
-            'git checkout --force --quiet ' . $revision . ' 2>&1',
-            $output,
-            $return
+            'git checkout --force --quiet ' . $revision . ' 2>&1'
         );
     }
 
@@ -82,7 +80,7 @@ class Git
      */
     public function getCurrentBranch()
     {
-        $this->execute('git status --short --branch', $output, $return);
+        $output = $this->execute('git status --short --branch');
 
         $tmp = explode(' ', $output[0]);
 
@@ -96,10 +94,8 @@ class Git
      */
     public function getDiff($from, $to)
     {
-        $this->execute(
-            'git diff --no-ext-diff ' . $from . ' ' . $to,
-            $output,
-            $return
+        $output = $this->execute(
+            'git diff --no-ext-diff ' . $from . ' ' . $to
         );
 
         return join("\n", $output);
@@ -110,10 +106,8 @@ class Git
      */
     public function getRevisions()
     {
-        $this->execute(
-            'git log --no-merges --date-order --reverse --format=medium',
-            $output,
-            $return
+        $output = $this->execute(
+            'git log --no-merges --date-order --reverse --format=medium'
         );
 
         $numLines  = count($output);
@@ -129,7 +123,7 @@ class Git
             } elseif (count($tmp) == 9 && $tmp[0] == 'Date:') {
                 $revisions[] = array(
                   'author'  => $author,
-                  'date'    => \DateTime::createFromFormat(
+                  'date'    => DateTime::createFromFormat(
                       'D M j H:i:s Y O',
                       join(' ', array_slice($tmp, 3))
                   ),
@@ -143,15 +137,20 @@ class Git
     }
 
     /**
-     * @param string  $command
-     * @param array   $output
-     * @param integer $returnValue
+     * @param  string  $command
+     * @throws RuntimeException
      */
-    protected function execute($command, &$output, &$returnValue)
+    protected function execute($command)
     {
         $cwd = getcwd();
         chdir($this->repositoryPath);
         exec($command, $output, $returnValue);
         chdir($cwd);
+
+        if ($returnValue !== 0) {
+            throw new RuntimeException($output);
+        }
+
+        return $output;
     }
 }

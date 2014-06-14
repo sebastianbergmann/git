@@ -1,4 +1,5 @@
-composer.lock
-composer.phar
-vendor/
-cache.properties
+/.idea
+/vendor
+/composer.lock
+/composer.phar
+/cache.properties
