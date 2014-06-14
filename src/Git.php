@@ -80,11 +80,12 @@ class Git
      */
     public function getCurrentBranch()
     {
-        $output = $this->execute('git status --short --branch');
+        $output = $this->execute('git status --porcelain --branch');
 
         $tmp = explode(' ', $output[0]);
+        $tmp = explode('...', $tmp[1]);
 
-        return $tmp[1];
+        return $tmp[0];
     }
 
     /**
