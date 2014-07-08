@@ -80,12 +80,8 @@ class Git
      */
     public function getCurrentBranch()
     {
-        $output = $this->execute('git status --porcelain --branch');
-
-        $tmp = explode(' ', $output[0]);
-        $tmp = explode('...', $tmp[1]);
-
-        return $tmp[0];
+        $output = $this->execute('git rev-parse --abbrev-ref HEAD');
+        return $output[0];
     }
 
     /**
