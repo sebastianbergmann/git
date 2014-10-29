@@ -103,19 +103,38 @@ class Git
     }
 
     /**
+     * Get Git repository's log
+     * @param string The order in which to show logs. ASC for chronological, DESC for the opposite
+     * @param int Number of registers to recover. If set with ASC, the function will get ALL commits and then drop the ones we don't want
      * @return array
      */
-    public function getRevisions()
+    public function getRevisions($order = 'DESC', $count = null)
     {
-        $output = $this->execute(
-            'git log --no-merges --date-order --reverse --format=medium'
-        );
+        $cmd = 'git log --no-merges --format=medium';
+        $countAndReverse = false;
+        if (strcmp($order, 'DESC') !== 0) {
+            // if ASC, get in chronological order
+            $cmd .=  ' --reverse';
+            if (!empty($count)) {
+                //if ASC *and* $count != null, take note to apply patch on lines number
+                $countAndReverse = true;
+            }
+        } elseif (!empty($count)) {
+            $cmd .= ' -'.intval($count);
+        }
+        $output = $this->execute($cmd);
 
         $numLines  = count($output);
         $revisions = array();
+        $author = '';
+        $sha1 = '';
 
         for ($i = 0; $i < $numLines; $i++) {
             $tmp = explode(' ', $output[$i]);
+            if ($countAndReverse && count($revisions) >= $count) {
+                // if ASC and $count != null, and we already have $count, leave
+                break;
+            }
 
             if (count($tmp) == 2 && $tmp[0] == 'commit') {
                 $sha1 = $tmp[1];
