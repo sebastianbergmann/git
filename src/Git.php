@@ -149,7 +149,7 @@ class Git
         chdir($cwd);
 
         if ($returnValue !== 0) {
-            throw new RuntimeException($output);
+            throw new RuntimeException(implode("\r\n",$output));
         }
 
         return $output;
