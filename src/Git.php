@@ -13,10 +13,6 @@ namespace SebastianBergmann\Git;
 use DateTime;
 
 /**
- * @author     Sebastian Bergmann <sebastian@phpunit.de>
- * @copyright  Sebastian Bergmann <sebastian@phpunit.de>
- * @license    http://www.opensource.org/licenses/BSD-3-Clause  The BSD 3-Clause License
- * @link       http://www.github.com/sebastianbergmann/git
  */
 class Git
 {
@@ -67,7 +63,7 @@ class Git
             'git diff --no-ext-diff ' . $from . ' ' . $to
         );
 
-        return join("\n", $output);
+        return implode("\n", $output);
     }
 
     /**
@@ -88,13 +84,13 @@ class Git
             if (count($tmp) == 2 && $tmp[0] == 'commit') {
                 $sha1 = $tmp[1];
             } elseif (count($tmp) == 4 && $tmp[0] == 'Author:') {
-                $author = join(' ', array_slice($tmp, 1));
+                $author = implode(' ', array_slice($tmp, 1));
             } elseif (count($tmp) == 9 && $tmp[0] == 'Date:') {
                 $revisions[] = array(
                   'author'  => $author,
                   'date'    => DateTime::createFromFormat(
                       'D M j H:i:s Y O',
-                      join(' ', array_slice($tmp, 3))
+                      implode(' ', array_slice($tmp, 3))
                   ),
                   'sha1'    => $sha1,
                   'message' => isset($output[$i+2]) ? trim($output[$i+2]) : ''
@@ -106,7 +102,7 @@ class Git
     }
 
     /**
-     * @param  string  $command
+     * @param  string           $command
      * @throws RuntimeException
      */
     protected function execute($command)
