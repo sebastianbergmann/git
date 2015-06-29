@@ -44,12 +44,11 @@ class Git
      */
     public function getCurrentBranch()
     {
-        $output = $this->execute('git status --porcelain --branch');
+        $output = $this->execute('git symbolic-ref HEAD');
 
-        $tmp = explode(' ', $output[0]);
-        $tmp = explode('...', $tmp[1]);
+        $tmp = explode('/', $output[0]);
 
-        return $tmp[0];
+        return $tmp[2];
     }
 
     /**
