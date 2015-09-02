@@ -117,4 +117,16 @@ class Git
 
         return $output;
     }
+    
+    /**
+     * @return string
+     */
+    public function getLastHash()
+    {
+        $result = $this->execute("git log -1 --stat");
+        if ($result) {
+            return preg_replace('#^([\w+]{8}).+#', '\\1', preg_replace('#^[^\s]+\s#', '', current($result)));
+        }
+        return null;
+    }
 }
