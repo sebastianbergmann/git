@@ -1,8 +1,8 @@
 {
-    "name": "sebastian/git",
-    "description": "Simple wrapper for Git",
+    "name": "debril/git",
+    "description": "Simple wrapper for Git forked from sebastian/git",
     "keywords": ["git"],
-    "homepage": "http://www.github.com/sebastianbergmann/git",
+    "homepage": "http://www.github.com/alexdebril/git",
     "license": "BSD-3-Clause",
     "authors": [
         {
