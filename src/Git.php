@@ -117,6 +117,8 @@ class Git
         for ($i = 0; $i < $numLines; $i++) {
             $tmp = explode(' ', $output[$i]);
 
+            $author = '';
+            $sha1 = '';
             if (count($tmp) == 2 && $tmp[0] == 'commit') {
                 $sha1 = $tmp[1];
             } elseif (count($tmp) == 4 && $tmp[0] == 'Author:') {
