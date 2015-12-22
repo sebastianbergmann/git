@@ -68,6 +68,16 @@ class Git
     /**
      * @return array
      */
+    public function getTags()
+    {
+        $output = $this->execute('git tag');
+
+        return $output;
+    }
+
+    /**
+     * @return array
+     */
     public function getRevisions()
     {
         $output = $this->execute(
