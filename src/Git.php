@@ -26,6 +26,15 @@ class Git
      */
     public function __construct($repositoryPath)
     {
+        if (!is_dir($repositoryPath)) {
+            throw new RuntimeException(
+                sprintf(
+                    'Directory "%s" does not exist',
+                    $repositoryPath
+                )
+            );
+        }
+
         $this->repositoryPath = realpath($repositoryPath);
     }
 
