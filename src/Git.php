@@ -93,7 +93,7 @@ class Git
                 $sha1 = $tmp[1];
             } elseif ($tmp[0] == 'Author:') {
                 $author = implode(' ', array_slice($tmp, 1));
-            } elseif ($tmp[0] == 'Date:') {
+            } elseif ($tmp[0] == 'Date:' && isset($author) && isset($sha1)) {
                 $revisions[] = array(
                   'author'  => $author,
                   'date'    => DateTime::createFromFormat(
@@ -103,6 +103,9 @@ class Git
                   'sha1'    => $sha1,
                   'message' => isset($output[$i+2]) ? trim($output[$i+2]) : ''
                 );
+
+                unset($author);
+                unset($sha1);
             }
         }
 
