@@ -113,6 +113,16 @@ class Git
     }
 
     /**
+     * @return bool
+     */
+    public function isWorkingCopyClean()
+    {
+        $output = $this->execute('git status');
+
+        return $output[count($output)-1] == 'nothing to commit, working directory clean';
+    }
+
+    /**
      * @param  string           $command
      * @throws RuntimeException
      */
