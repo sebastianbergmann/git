@@ -130,7 +130,14 @@ class Git
     {
         $cwd = getcwd();
         chdir($this->repositoryPath);
+        $lang = (getenv($var='LC_ALL') ?: (getenv($var='LC_MESSAGES') ?: getenv($var='LANG')));
+        if ($lang) {
+            putenv($var . '=C');
+        }
         exec($command, $output, $returnValue);
+        if ($lang) {
+            putenv($var . '=' . $lang);
+        }
         chdir($cwd);
 
         if ($returnValue !== 0) {
