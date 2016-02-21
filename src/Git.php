@@ -44,7 +44,7 @@ class Git
     public function checkout($revision)
     {
         $this->execute(
-            'git checkout --force --quiet ' . $revision . ' 2>&1'
+            'checkout --force --quiet ' . $revision . ' 2>&1'
         );
     }
 
@@ -53,7 +53,7 @@ class Git
      */
     public function getCurrentBranch()
     {
-        $output = $this->execute('git symbolic-ref HEAD');
+        $output = $this->execute('symbolic-ref HEAD');
 
         $tmp = explode('/', $output[0]);
 
@@ -68,7 +68,7 @@ class Git
     public function getDiff($from, $to)
     {
         $output = $this->execute(
-            'git diff --no-ext-diff ' . $from . ' ' . $to
+            'diff --no-ext-diff ' . $from . ' ' . $to
         );
 
         return implode("\n", $output);
@@ -80,7 +80,7 @@ class Git
     public function getRevisions()
     {
         $output = $this->execute(
-            'git log --no-merges --date-order --reverse --format=medium'
+            'log --no-merges --date-order --reverse --format=medium'
         );
 
         $numLines  = count($output);
@@ -117,7 +117,7 @@ class Git
      */
     public function isWorkingCopyClean()
     {
-        $output = $this->execute('git status');
+        $output = $this->execute('status');
 
         return $output[count($output)-1] == 'nothing to commit, working directory clean';
     }
@@ -128,17 +128,8 @@ class Git
      */
     protected function execute($command)
     {
-        $cwd = getcwd();
-        chdir($this->repositoryPath);
-        $lang = (getenv($var='LC_ALL') ?: (getenv($var='LC_MESSAGES') ?: getenv($var='LANG')));
-        if ($lang) {
-            putenv($var . '=C');
-        }
+        $command = 'LC_ALL=en_US.UTF-8 git -C ' . escapeshellarg($this->repositoryPath) . ' ' . $command;
         exec($command, $output, $returnValue);
-        if ($lang) {
-            putenv($var . '=' . $lang);
-        }
-        chdir($cwd);
 
         if ($returnValue !== 0) {
             throw new RuntimeException(implode("\r\n", $output));
