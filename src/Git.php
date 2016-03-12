@@ -53,11 +53,9 @@ class Git
      */
     public function getCurrentBranch()
     {
-        $output = $this->execute('symbolic-ref HEAD');
+        $output = $this->execute('symbolic-ref --short HEAD');
 
-        $tmp = explode('/', $output[0]);
-
-        return $tmp[2];
+        return $output[0];
     }
 
     /**
