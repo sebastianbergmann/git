@@ -1,13 +1,17 @@
 {
-    "name": "sebastian/git",
+    "name": "universityofadelaide/git",
     "description": "Simple wrapper for Git",
     "keywords": ["git"],
-    "homepage": "http://www.github.com/sebastianbergmann/git",
+    "homepage": "http://www.github.com/universityofadelaide/git",
     "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Sebastian Bergmann",
             "email": "sebastian@phpunit.de"
+        },
+        {
+            "name": "Casey Fulton",
+            "email": "casey.fulton@adelaide.edu.au"
         }
     ],
     "require": {

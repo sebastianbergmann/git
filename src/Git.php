@@ -22,9 +22,14 @@ class Git
     private $repositoryPath;
 
     /**
+     * @var string
+     */
+    private $keyPath;
+
+    /**
      * @param string $repositoryPath
      */
-    public function __construct($repositoryPath)
+    public function __construct($repositoryPath, $keyPath = '')
     {
         if (!is_dir($repositoryPath)) {
             throw new RuntimeException(
@@ -36,6 +41,10 @@ class Git
         }
 
         $this->repositoryPath = realpath($repositoryPath);
+
+        if (is_file($keyPath)) {
+            $this->keyPath = realpath($keyPath);
+        }
     }
 
     /**
@@ -130,6 +139,11 @@ class Git
         if (DIRECTORY_SEPARATOR == '/') {
             $command = 'LC_ALL=en_US.UTF-8 ' . $command;
         }
+
+        if (isset($this->keyPath)) {
+            $command = "ssh-agent bash -c 'ssh-add " . escapeshellarg($this->keyPath) . "; $command'";
+        }
+
         exec($command, $output, $returnValue);
 
         if ($returnValue !== 0) {
