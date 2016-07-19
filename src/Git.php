@@ -130,6 +130,38 @@ class Git
     }
 
     /**
+     * @param string $filename
+     * @return string
+     */
+    public function add($filename)
+    {
+      $output = $this->execute('add ' . $filename);
+
+      return $output[0];
+    }
+
+    /**
+     * @param string $commitMessage
+     * @return string
+     */
+    public function commit($commitMessage)
+    {
+      $output = $this->execute("commit -m '" . addslashes($commitMessage) . "'");
+
+      return $output[0];
+    }
+
+    /**
+     * @return string
+     */
+    public function push()
+    {
+        $output = $this->execute('push');
+
+        return $output[0];
+    }
+
+    /**
      * @param  string           $command
      * @throws RuntimeException
      */
