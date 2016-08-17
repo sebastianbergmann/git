@@ -117,7 +117,7 @@ class Git
     {
         $output = $this->execute('status');
 
-        return $output[count($output)-1] == 'nothing to commit, working directory clean';
+        return $output[count($output)-1] == 'nothing to commit, working tree clean';
     }
 
     /**
