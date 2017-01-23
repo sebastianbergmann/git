@@ -22,9 +22,14 @@ class Git
     private $repositoryPath;
 
     /**
+     * @var string
+     */
+    private $keyPath;
+
+    /**
      * @param string $repositoryPath
      */
-    public function __construct($repositoryPath)
+    public function __construct($repositoryPath, $keyPath = '')
     {
         if (!is_dir($repositoryPath)) {
             throw new RuntimeException(
@@ -36,6 +41,10 @@ class Git
         }
 
         $this->repositoryPath = realpath($repositoryPath);
+
+        if (is_file($keyPath)) {
+            $this->keyPath = realpath($keyPath);
+        }
     }
 
     /**
@@ -122,6 +131,38 @@ class Git
     }
 
     /**
+     * @param string $filename
+     * @return string
+     */
+    public function add($filename)
+    {
+      $output = $this->execute('add ' . $filename);
+
+      return $output[0];
+    }
+
+    /**
+     * @param string $commitMessage
+     * @return string
+     */
+    public function commit($commitMessage)
+    {
+      $output = $this->execute("commit -m '" . addslashes($commitMessage) . "'");
+
+      return $output[0];
+    }
+
+    /**
+     * @return string
+     */
+    public function push()
+    {
+        $output = $this->execute('push');
+
+        return $output[0];
+    }
+
+    /**
      * @param  string           $command
      * @throws RuntimeException
      */
@@ -131,6 +172,11 @@ class Git
         if (DIRECTORY_SEPARATOR == '/') {
             $command = 'LC_ALL=en_US.UTF-8 ' . $command;
         }
+
+        if (isset($this->keyPath)) {
+            $command = "ssh-agent bash -c 'ssh-add " . escapeshellarg($this->keyPath) . "; $command'";
+        }
+
         exec($command, $output, $returnValue);
 
         if ($returnValue !== 0) {
