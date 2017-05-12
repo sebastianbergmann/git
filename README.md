@@ -1,3 +1,5 @@
+**This project is abandoned and no longer maintained.**
+
 # Git
 
 Simple PHP wrapper for Git.
