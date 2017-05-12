@@ -37,6 +37,14 @@ class Git
     }
 
     /**
+     * Get the repository path (working tree).
+     */
+    public function getRepositoryPath()
+    {
+        return $this->repositoryPath;
+    }
+    
+    /**
      * @param string $revision
      */
     public function checkout($revision)
