@@ -17,7 +17,7 @@ class Git
     /**
      * @var string
      */
-    private $repositoryPath;
+    protected $repositoryPath;
 
     /**
      * @param string $repositoryPath
